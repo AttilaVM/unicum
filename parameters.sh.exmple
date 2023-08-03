@@ -1,0 +1,1 @@
+export SAFE_IP_ADDRESSES='69.69.69.69 2001:db8:3333:4444:5555:6666:7777:8888' # for fail2ban to ignore
