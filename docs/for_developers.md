@@ -62,8 +62,70 @@ Status
 `- Jail list:   sshd
 ```
 
-# Set up certificate authority
+# Manage OpenVPN certificates
+
+## Set up certificate authority
+
+This step is already done, only documented for reproducibality.
+
+easy-rsa must be installed
+
+Create certificate authority directory. It must be readable only for the admin user. Set umask to 077.
 
 ```shell
-sudo apt-get install -y easy-rsa
+make-cadir ~/openvpn-ca
+```
+
+```shell
+cd ~/openvpn-ca
+
+export EASYRSA="$(pwd)"
+export EASYRSA_VARS_FILE="$(pwd)/vars"
+```
+
+modify the `vars` file
+
+```conf
+...
+# Choices for crypto alg are: (each in lower-case)
+#  * rsa
+#  * ec
+#  * ed
+
+set_var EASYRSA_ALGO            ed
+
+# Define the named curve, used in ec & ed modes:
+
+set_var EASYRSA_CURVE           ed25519
+
+# In how many days should the root CA key expire?
+
+set_var EASYRSA_CA_EXPIRE       3650
+
+# In how many days should certificates expire?
+
+set_var EASYRSA_CERT_EXPIRE     3650
+...
+```
+
+```shell
+./easyrsa --use-algo=ed --curve=ed25519 init-pki
+```
+
+
+## Create OpnVPN server certificate
+
+```shell
+./easyrsa gen-req unicumvpn nopass
+```
+
+
+## Create client certificates
+
+```shell
+./easyrsa gen-req <client name> nopass
+```
+
+```
+./easyrsa sign-req client <client name>
 ```

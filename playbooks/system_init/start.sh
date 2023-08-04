@@ -7,6 +7,7 @@ script_path=$(readlink -f "$0")
 playbook_root=$(dirname "$script_path")
 
 export PLAYBOOK_ROOT="$playbook_root"
+export PATH="$PATH:$PLAYBOOK_ROOT/tasks"
 
 # create logfile
 logdir="/var/log/ansible_at_home/"
@@ -34,7 +35,16 @@ apt install -y \
   neovim \
   tmux \
   tree \
-  jq
+  jq \
+  python3 \
+  ipython3 \
+  python3-ipython
+
+## install admin tools
+apt install -y \
+  easy-rsa \
+  nmap \
+  iptables
 
 ## Install servicies
 apt install -y \
@@ -71,8 +81,37 @@ fi
 systemctl start fail2ban.service
 systemctl enable fail2ban.service
 
+## Create public key infrastructure
+
+task-create-pki.sh "${EASYRSA_DIR}"
+
+## Create and install certificates OpenVPN
+
+ensure-command.sh \
+ 'openvpn --genkey tls-auth /etc/openvpn/server/ta.key' \
+ 'test -f /etc/openvpn/server/ta.key'
+
+ensure-command.sh \
+  'openssl dhparam -out /etc/openvpn/server/dh.pem 2048' \
+  'test -f /etc/openvpn/server/dh.pem'
+
+task-install-openvpn-certificate.sh "${EASYRSA_DIR}" ${OPENVPN_NAME}
+
+state_openvpn=$(ensure-file.sh etc/openvpn/server.conf 644 'true')
+systemctl enable openvpn.service
+
+if [ "$state_openvpn" == "changed" ]; then
+  log.sh 'restart openvpn'
+  systemctl restart openvpn.service
+else
+  systemctl start openvpn.service
+fi
+
+ensure-file.sh etc/openvpn/template_client.conf 644 'true'
+
 ## Install scripts
 
+ensure-file.sh usr/local/bin/openvpn-generate-client-configs.sh 755 'true' > /dev/null
 ensure-file.sh usr/local/bin/ip2loc.sh 755 'true' > /dev/null
 ensure-file.sh usr/local/bin/ssh-attack-summary.sh 755 'true' > /dev/null
 

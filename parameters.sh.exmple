@@ -1,1 +1,12 @@
 export SAFE_IP_ADDRESSES='69.69.69.69 2001:db8:3333:4444:5555:6666:7777:8888' # for fail2ban to ignore
+
+export SERVER_IP='69.69.69.69'
+
+# check the commant of the vars file of a easy-rsa CA directory
+export EASYRSA_CA_DIR='/etc/my_ca_dir'
+export EASYRSA_ALGO=''
+export EASYRSA_ALGO_PARAM=''
+export EASYRSA_CA_EXPIRE=''
+export EASYRSA_CERT_EXPIRE=''
+
+export OPENVPN_NAME='myvpn'
