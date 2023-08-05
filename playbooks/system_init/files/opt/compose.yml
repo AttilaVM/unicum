@@ -1,0 +1,39 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:15.3
+    user: 1003:1003 # posgres user
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - postgres-conf:/var/lib/postgresql/data:ro
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    networks:
+      unicumnet:
+        ipv4_address: 172.20.0.10
+
+volumes:
+  postgres-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/opt/postgresql/data'
+  postgres-conf:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/opt/postgresql/etc'
+
+networks:
+  unicumnet:
+    driver: bridge
+    internal: false # containers in this network can communicate outside
+    attachable: true # containers connect to this network from other compose files
+    driver_opts:
+      com.docker.network.bridge.name: br-unicum
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

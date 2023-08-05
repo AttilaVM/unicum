@@ -129,3 +129,18 @@ set_var EASYRSA_CERT_EXPIRE     3650
 ```shell
 ./easyrsa sign-req client <client name>
 ```
+
+# debug routing erros
+
+# On linux server
+
+```shell
+tcpdump -i any dst port 5432
+```
+
+## Windows
+
+```shell
+route print
+```
+

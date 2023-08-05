@@ -18,3 +18,7 @@ if [ -e "$PROJECT_ROOT/parameters.sh" ]; then
 else 
     echo 'ERROR: missing parameters.sh. run `cp parameters.sh.example parameters.sh` and configure it'
 fi
+
+echo 'Enter PostgreSQL database password (the prompt is invisible):'
+read -s pgpassword
+export PGPASSWORD="$pgpassword"

@@ -15,7 +15,8 @@ apt install -y \
   ipython3 \
   python3-ipython \
   gnupg \
-  curl
+  curl \
+  pass
 
 ## install admin tools
 apt install -y \

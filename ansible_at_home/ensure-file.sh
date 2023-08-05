@@ -10,14 +10,15 @@
 # destination is restored, otherwise the new file is deleted. However in all cases an error is returned if the check command fails
 #
 # examples
-# $ ensure-file etc/hosts.template
+# $ ensure-file etc/hosts.template root:root 644 'true'
 # >>> # no output, side-effect only: the /etc/hosts file will be overriden by the rendering of a template from <current playbook/files/etc/hosts>
 
 set -euo pipefail
 
 path=${1:? "A path must be defined as the first varialbe"}
-file_permision=${2:? "A file permision mode of the file in octal format such as 600"}
-check_command=${3:? "a command which should check if the config file works, if no applicable just pass `true`"}
+ownership=${2:? "add user:group ownership syntax"}
+file_permision=${3:? "A file permision mode of the file in octal format such as 600"}
+check_command=${4:? "a command which should check if the config file works, if no applicable just pass `true`"}
 
 src="$PLAYBOOK_ROOT/files/$path"
 dst="/$path"
@@ -56,6 +57,7 @@ if [ "$src_extension" == "template" ]; then
         log.sh "$dst won't change"
         rm "$temp_rendered_file"
         echo 'unchanged'
+        chown "$ownership" "$dst"
         chmod "$file_permision" "$dst"
         exit 0
     else
@@ -66,6 +68,7 @@ else
     if diff -q "$src" "$dst" &> /dev/null; then
         log.sh "$dst won't change"
         echo 'unchanged'
+        chown "$ownership" "$dst"
         chmod "$file_permision" "$dst"
         exit 0
     fi
@@ -122,6 +125,7 @@ if [[ ! $exit_status -eq 0 ]]; then
     fi
 fi
 
+chown "$ownership" "$dst"
 chmod "$file_permision" "$dst"
 echo 'changed'
 
