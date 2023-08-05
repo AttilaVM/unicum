@@ -25,33 +25,8 @@ trap 'catch $? $LINENO' ERR
 
 log.sh "START: $playbook_name"
 
-
-# package managment
-apt update -y
-apt upgrade -y
-
-## Install utilities
-apt install -y \
-  neovim \
-  tmux \
-  tree \
-  jq \
-  python3 \
-  ipython3 \
-  python3-ipython
-
-## install admin tools
-apt install -y \
-  easy-rsa \
-  nmap \
-  iptables
-
-## Install servicies
-apt install -y \
-  fail2ban \
-  openvpn
+task-install-packages.sh
   
-
 # System configuration
 
 ## Ensure backup directory for old system config files
