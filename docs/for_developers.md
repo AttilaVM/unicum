@@ -126,6 +126,6 @@ set_var EASYRSA_CERT_EXPIRE     3650
 ./easyrsa gen-req <client name> nopass
 ```
 
-```
+```shell
 ./easyrsa sign-req client <client name>
 ```
