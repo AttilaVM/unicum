@@ -12,6 +12,17 @@ services:
     networks:
       unicumnet:
         ipv4_address: 172.20.0.10
+  #minecraft
+  minecraft: 
+    image: openjdk:22-jdk-slim-bullseye
+    user: 1004:1004
+    volumes:
+      - minecraft-server:/app/
+    networks: 
+      unicumnet: 
+        ipv4_address: 172.20.0.20
+    working_dir: /app/
+    command: java -jar server.jar
 
 volumes:
   postgres-data:
@@ -26,6 +37,13 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '/opt/postgresql/etc'
+  #minecraft
+  minecraft-server:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/opt/minecraft'
 
 networks:
   unicumnet:
