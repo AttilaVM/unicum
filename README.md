@@ -1,6 +1,6 @@
 # UNICUM Network-Infrastructure, Computation Unified Microsystems
 
-![Install ssh remote plugin](docs/figs/vscode-ssh-install.png)
+![Install ssh remote plugin](docs/figs/royal_fear.png)
 
 ## Goals
 
