@@ -52,7 +52,7 @@ if [ "$src_extension" == "template" ]; then
     temp_rendered_file=$(tempfile)
     # render to destination path
     < "$src" envsubst > "$temp_rendered_file"
-    if diff -q "$temp_rendered_file" "$dst" > /dev/null; then
+    if diff -q "$temp_rendered_file" "$dst" &> /dev/null; then
         log.sh "$dst won't change"
         rm "$temp_rendered_file"
         echo 'unchanged'
@@ -63,7 +63,7 @@ if [ "$src_extension" == "template" ]; then
     fi
 # for ordinary files compare directly
 else
-    if diff -q "$src" "$dst" > /dev/null; then
+    if diff -q "$src" "$dst" &> /dev/null; then
         log.sh "$dst won't change"
         echo 'unchanged'
         chmod "$file_permision" "$dst"
