@@ -1,4 +1,6 @@
-# UNICUM Network-Infrastructure, Computation Unified Microsystems 
+# UNICUM Network-Infrastructure, Computation Unified Microsystems
+
+![Install ssh remote plugin](docs/figs/vscode-ssh-install.png)
 
 ## Goals
 
@@ -9,6 +11,7 @@
 
 - [x] basic Ansible At Home scripts
 - [x] more secure SSHD
+- [ ] client scripts to set firewall
 - [ ] fix openvpn unit file, now it runs in tmux
 - [ ] install sendmail to get email alerts
 - [ ] configure fail2ban to send email alerts
