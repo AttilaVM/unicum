@@ -105,6 +105,12 @@ chown postgres:postgres -R /opt/postgresql
 
 ensure-file.sh opt/compose.yml postgres:postgres 644 'docker compose -f /opt/compose.yml  config'
 
+## Configure minecraft
+
+ensure-user.sh minecraft ''
+mkdir -p /opt/minecraft
+chown minecraft:minecraft -R /opt/minecraft
+
 # configure network
 
 ensure-firewall-rule.sh \
