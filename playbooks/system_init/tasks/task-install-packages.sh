@@ -24,6 +24,10 @@ apt install -y \
   nmap \
   iptables \
   ca-certificates \
+  htop 
+
+apt install -y \
+  openjdk-18-jdk
 
 ## Install servicies
 apt install -y \
