@@ -21,8 +21,15 @@ def minecraft_wrapper_process(command_pipe):
         msg = command_pipe.recv()  # Blocking call, waits for data
         print(f"Child Process Received: {msg}")
         if msg == "stop":
-            print("Minecraft server will be stopped", file=sys.stderr)
-            minecraft_server_process.communicate(input='/stop\n'.encode())
+            try:
+                print("Minecraft server will be stopped", file=sys.stderr)
+                minecraft_server_process.communicate(input='/stop\n'.encode())
+            except ValueError as e:
+                if str(e) == "write to closed file":
+                    print("Minecraft server is already stopped", file=sys.stderr)
+                    continue
+                else:
+                    raise e
             print("Minecraft server is stopping", file=sys.stderr)
             minecraft_server_process.wait()
             print("Minecraft server stopped successfully!", file=sys.stderr)
