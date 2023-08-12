@@ -7,7 +7,7 @@ import os
 import signal
 from multiprocessing import Process, Pipe
 
-HTTP_PORT=5000
+HTTP_PORT=80
 
 PID = os.getpid()
 print("PID:", PID)
@@ -15,10 +15,10 @@ print("PID:", PID)
 # create pipe
 parent_conn, child_conn = Pipe()
 
-def minecraft_wrapper_process(pipe):
+def minecraft_wrapper_process(command_pipe):
     minecraft_server_process = subprocess.Popen(['java', '-jar', 'server.jar', 'nogui'], stdin=PIPE)
     while True:
-        msg = pipe.recv()  # Blocking call, waits for data
+        msg = command_pipe.recv()  # Blocking call, waits for data
         print(f"Child Process Received: {msg}")
         if msg == "stop":
             print("Minecraft server will be stopped", file=sys.stderr)
@@ -58,9 +58,9 @@ def stop_server():
         return jsonify({"state": "starting"}), 200
     else:
         return jsonify({"error": "Invalid command!"}), 400
-# TODO /health
+# TODO /state
 
 if __name__ == "__main__":
    p = Process(target=minecraft_wrapper_process, args=(child_conn,))
    p.start()
-   app.run(host='0.0.0.0', port=80)
+   app.run(host='0.0.0.0', port=HTTP_PORT)
