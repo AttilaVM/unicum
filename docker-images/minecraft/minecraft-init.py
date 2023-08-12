@@ -16,7 +16,7 @@ print("PID:", PID)
 parent_conn, child_conn = Pipe()
 
 def minecraft_wrapper_process(command_pipe):
-    minecraft_server_process = subprocess.Popen(['java', '-jar', 'server.jar', 'nogui'], stdin=PIPE)
+    minecraft_server_process = subprocess.Popen(['java', '-jar', '/app/server.jar', 'nogui'], stdin=PIPE)
     while True:
         msg = command_pipe.recv()  # Blocking call, waits for data
         print(f"Child Process Received: {msg}")
@@ -28,7 +28,7 @@ def minecraft_wrapper_process(command_pipe):
             print("Minecraft server stopped successfully!", file=sys.stderr)
         elif msg == "start":
             print("Minecraft server is starting!", file=sys.stderr)
-            minecraft_server_process = subprocess.Popen(['java', '-jar', 'server.jar', 'nogui'], stdin=PIPE)
+            minecraft_server_process = subprocess.Popen(['java', '-jar', '/app/server.jar', 'nogui'], stdin=PIPE)
 
 app = Flask(__name__)
 
